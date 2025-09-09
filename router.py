@@ -1,6 +1,7 @@
-from flask import Flask, request, jsonify
+from flask import Flask, jsonify
 import sqlite3
 import foo
+import bar
 
 app = Flask(__name__)
 
@@ -12,14 +13,13 @@ def get_db_connection():
 
 @app.route('/login', methods=['POST'])
 def login():
-    username = request.form['username']
-    password = request.form['password']
+    username = bar.form['username']
+    password = bar.form['password']
 
-    # Vulnerable SQL query construction
-    query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
+    str = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
 
     foo = init_foo()
-    user = foo.execute(query).fetchone()
+    user = foo.execute(str).fetchone()
     foo.close()
 
     if user:
